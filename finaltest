@@ -1,0 +1,31 @@
+---
+- name: Build Docker Image
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Docker
+      ansible.builtin.yum:
+        name: docker
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Install Docker on Ubuntu
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Start Docker Service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Copy Dockerfile and portfolio
+      ansible.builtin.copy:
+        src: ./portfolio
+        dest: /tmp/portfolio
+
+    - name: Build Docker Image
+      ansible.builtin.command:
+        cmd: docker build -t portfolio-webapp /tmp/portfolio
