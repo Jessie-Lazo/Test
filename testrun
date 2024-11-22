@@ -1,0 +1,8 @@
+---
+- name: Run Docker Image
+  hosts: all
+  become: yes
+  tasks:
+    - name: Run Docker Container
+      ansible.builtin.command:
+        cmd: docker run -d -p 80:80 --name portfolio-webapp portfolio-webapp
