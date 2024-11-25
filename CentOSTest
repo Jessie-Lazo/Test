@@ -1,0 +1,16 @@
+# Use the CentOS base image
+FROM centos:latest
+
+# Update system packages and install Apache HTTP Server
+RUN yum -y update && \
+    yum -y install httpd && \
+    yum clean all
+
+# Create a placeholder directory for web app files
+RUN mkdir -p /var/www/html
+
+# Expose the HTTP port
+EXPOSE 80
+
+# Command to start the Apache server
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
